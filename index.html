@@ -1175,11 +1175,14 @@
         // ========== 导航栏平滑滚动 ==========
         document.querySelectorAll('.navbar-links a').forEach(link => {
             link.addEventListener('click', (e) => {
-                e.preventDefault();
                 const targetId = link.getAttribute('href');
-                const target = document.querySelector(targetId);
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // 只对锚点链接（#开头）进行平滑滚动，外部页面链接正常跳转
+                if (targetId.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 }
             });
         });
