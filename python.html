@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python基础课程 🐍 - 何冬怡的学习空间</title>
+    <title>Python学习站 🐍 - 跟着冬怡学编程</title>
     <style>
         /* ========== 全局样式 ========== */
         @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
@@ -38,25 +38,16 @@
             line-height: 1.8;
         }
 
-        /* ========== 滚动条美化 ========== */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--pink-light);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--pink-main);
-            border-radius: 10px;
-        }
+        /* ========== 滚动条 ========== */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--pink-light); }
+        ::-webkit-scrollbar-thumb { background: var(--pink-main); border-radius: 10px; }
 
         /* ========== 飘落装饰 ========== */
         .falling-decorations {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
@@ -71,24 +62,16 @@
         }
 
         @keyframes fall {
-            0% {
-                transform: translateY(-50px) rotate(0deg);
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(110vh) rotate(360deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 0.6; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
         /* ========== 导航栏 ========== */
         .navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             padding: 12px 0;
@@ -96,7 +79,7 @@
         }
 
         .navbar-content {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -114,9 +97,19 @@
             gap: 8px;
         }
 
+        .navbar-logo .logo-python {
+            display: inline-block;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
         .navbar-links {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             list-style: none;
         }
 
@@ -125,7 +118,7 @@
             color: var(--text-light);
             padding: 6px 16px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             transition: all 0.3s ease;
             font-weight: 500;
         }
@@ -140,7 +133,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            background: var(--pink-main);
+            background: var(--pink-main) !important;
             color: white !important;
             padding: 6px 16px !important;
             border-radius: 20px;
@@ -153,32 +146,30 @@
             transform: translateX(-3px);
         }
 
-        /* ========== 页面头部 ========== */
-        .page-header {
-            background: linear-gradient(135deg, var(--pink-light), var(--lavender));
-            padding: 100px 30px 60px;
+        /* ========== Hero Banner ========== */
+        .hero {
+            background: linear-gradient(135deg, var(--pink-light) 0%, var(--lavender) 50%, #e0f0ff 100%);
+            padding: 120px 30px 70px;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .page-header::before {
+        .hero::before {
             content: '🐍';
             position: absolute;
-            top: 80px;
-            left: 10%;
-            font-size: 3rem;
-            opacity: 0.2;
+            top: 80px; left: 8%;
+            font-size: 4rem;
+            opacity: 0.15;
             animation: float 4s ease-in-out infinite;
         }
 
-        .page-header::after {
+        .hero::after {
             content: '💻';
             position: absolute;
-            top: 100px;
-            right: 12%;
-            font-size: 2.5rem;
-            opacity: 0.2;
+            top: 100px; right: 10%;
+            font-size: 3rem;
+            opacity: 0.15;
             animation: float 4s ease-in-out infinite 1s;
         }
 
@@ -187,38 +178,67 @@
             50% { transform: translateY(-15px); }
         }
 
-        .page-title {
+        .hero-badge {
+            display: inline-block;
+            background: white;
+            color: var(--pink-dark);
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px var(--shadow-soft);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
             font-family: 'ZCOOL KuaiLe', cursive;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: var(--pink-dark);
             margin-bottom: 15px;
             position: relative;
             z-index: 1;
         }
 
-        .page-title .python-icon {
-            display: inline-block;
-            animation: wiggle 2s ease-in-out infinite;
-        }
-
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
-
-        .page-subtitle {
-            font-size: 1rem;
+        .hero-subtitle {
+            font-size: 1.05rem;
             color: var(--text-light);
-            max-width: 600px;
-            margin: 0 auto;
+            max-width: 550px;
+            margin: 0 auto 30px;
             position: relative;
             z-index: 1;
+            line-height: 1.9;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-num {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 2rem;
+            color: var(--pink-dark);
+        }
+
+        .hero-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
         }
 
         /* ========== 学习进度 ========== */
         .progress-section {
             max-width: 900px;
-            margin: -30px auto 0;
+            margin: -35px auto 0;
             padding: 0 30px;
             position: relative;
             z-index: 10;
@@ -237,9 +257,7 @@
             justify-content: center;
         }
 
-        .progress-info {
-            text-align: center;
-        }
+        .progress-info { text-align: center; }
 
         .progress-label {
             font-size: 0.85rem;
@@ -281,11 +299,11 @@
             text-align: center;
         }
 
-        /* ========== 课程章节 ========== */
+        /* ========== 通用 Section ========== */
         .section {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
-            padding: 50px 30px;
+            padding: 55px 30px;
             position: relative;
             z-index: 1;
         }
@@ -295,7 +313,7 @@
             font-size: 1.6rem;
             color: var(--pink-dark);
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
             position: relative;
         }
 
@@ -306,16 +324,16 @@
             margin-top: 5px;
         }
 
-        /* ========== 章节卡片 ========== */
+        /* ========== 课程章节 ========== */
         .chapters-grid {
             display: grid;
-            gap: 20px;
+            gap: 22px;
         }
 
         .chapter-card {
             background: white;
             border-radius: 20px;
-            padding: 25px 30px;
+            padding: 28px 32px;
             box-shadow: 0 5px 25px var(--shadow-soft);
             border: 2px solid var(--pink-light);
             transition: all 0.4s ease;
@@ -332,10 +350,8 @@
         .chapter-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 5px;
-            height: 100%;
+            top: 0; left: 0;
+            width: 5px; height: 100%;
             background: linear-gradient(to bottom, var(--pink-main), var(--lavender));
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -353,10 +369,9 @@
         }
 
         .chapter-number {
-            width: 45px;
-            height: 45px;
+            width: 48px; height: 48px;
             background: linear-gradient(135deg, var(--pink-main), var(--pink-dark));
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -370,15 +385,16 @@
             font-family: 'ZCOOL KuaiLe', cursive;
             font-size: 1.2rem;
             color: var(--text-dark);
+            flex: 1;
         }
 
         .chapter-icon {
-            font-size: 1.5rem;
-            margin-left: auto;
+            font-size: 1.8rem;
+            flex-shrink: 0;
         }
 
         .chapter-desc {
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             color: var(--text-light);
             line-height: 1.8;
             margin-bottom: 15px;
@@ -407,87 +423,192 @@
 
         .chapter-status {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 15px; right: 15px;
             font-size: 0.75rem;
             padding: 4px 12px;
             border-radius: 10px;
             font-weight: 500;
         }
 
-        .status-pending {
-            background: var(--lavender);
-            color: #7c5c9c;
+        .status-pending { background: var(--lavender); color: #7c5c9c; }
+        .status-learning { background: #fff3cd; color: #856404; }
+        .status-done { background: #d4edda; color: #155724; }
+
+        /* ========== 学习路线图 ========== */
+        .roadmap-section {
+            background: linear-gradient(135deg, var(--pink-light), var(--lavender));
+            border-radius: 25px;
+            padding: 45px 40px;
         }
 
-        .status-learning {
-            background: #fff3cd;
-            color: #856404;
+        .roadmap-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.4rem;
+            color: var(--pink-dark);
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        .status-done {
-            background: #d4edda;
-            color: #155724;
+        .roadmap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+        }
+
+        .roadmap-step {
+            text-align: center;
+            padding: 15px 12px;
+            position: relative;
+        }
+
+        .roadmap-step-icon {
+            width: 60px; height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 10px;
+            box-shadow: 0 4px 15px var(--shadow-pink);
+            transition: all 0.3s ease;
+        }
+
+        .roadmap-step:hover .roadmap-step-icon {
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px var(--shadow-pink);
+        }
+
+        .roadmap-step-name {
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .roadmap-arrow {
+            font-size: 1.5rem;
+            color: var(--pink-main);
+            padding: 0 5px;
+            align-self: flex-start;
+            margin-top: 18px;
         }
 
         /* ========== 学习小贴士 ========== */
         .tips-section {
-            background: linear-gradient(135deg, var(--pink-light), var(--lavender));
+            background: white;
             border-radius: 25px;
-            padding: 40px;
-            margin-top: 20px;
+            padding: 45px 40px;
+            box-shadow: 0 8px 30px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
         }
 
         .tips-title {
             font-family: 'ZCOOL KuaiLe', cursive;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: var(--pink-dark);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: center;
         }
 
         .tips-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            gap: 18px;
         }
 
         .tip-item {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
+            background: var(--cream);
+            border-radius: 18px;
+            padding: 25px 20px;
             text-align: center;
-            box-shadow: 0 4px 15px var(--shadow-soft);
             transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
 
         .tip-item:hover {
             transform: translateY(-3px);
+            border-color: var(--pink-main);
             box-shadow: 0 8px 25px var(--shadow-pink);
         }
 
         .tip-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+        }
+
+        .tip-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--pink-dark);
+            margin-bottom: 6px;
         }
 
         .tip-text {
-            font-size: 0.9rem;
-            color: var(--text-dark);
-            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ========== 推荐资源 ========== */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 5px 20px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px var(--shadow-pink);
+            border-color: var(--pink-main);
+        }
+
+        .resource-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .resource-name {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.1rem;
+            color: var(--pink-dark);
+            margin-bottom: 8px;
+        }
+
+        .resource-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.7;
         }
 
         /* ========== 页脚 ========== */
         .footer {
             text-align: center;
-            padding: 40px 20px;
+            padding: 45px 20px;
             background: linear-gradient(to top, var(--pink-light), transparent);
             position: relative;
             z-index: 1;
         }
 
+        .footer-brand {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.2rem;
+            color: var(--pink-dark);
+            margin-bottom: 8px;
+        }
+
         .footer-text {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-light);
         }
 
@@ -504,13 +625,29 @@
             45% { transform: scale(1.15); }
         }
 
-        /* ========== 回到顶部按钮 ========== */
+        .footer-links {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--pink-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--pink-dark);
+        }
+
+        /* ========== 回到顶部 ========== */
         .back-to-top {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
+            bottom: 30px; right: 30px;
+            width: 50px; height: 50px;
             background: var(--pink-main);
             color: white;
             border: none;
@@ -530,9 +667,7 @@
             transform: translateY(-3px);
         }
 
-        .back-to-top.show {
-            display: flex;
-        }
+        .back-to-top.show { display: flex; }
 
         /* ========== 动画 ========== */
         .fade-in {
@@ -548,38 +683,22 @@
 
         /* ========== 响应式 ========== */
         @media (max-width: 768px) {
-            .page-header {
-                padding: 90px 20px 50px;
-            }
+            .hero { padding: 100px 20px 55px; }
+            .hero-title { font-size: 2rem; }
+            .hero-stats { gap: 25px; }
+            .progress-card { padding: 20px; gap: 20px; }
+            .chapter-card { padding: 20px; }
+            .chapter-header { flex-wrap: wrap; }
+            .tips-section, .roadmap-section { padding: 30px 20px; }
+            .roadmap-arrow { display: none; }
+            .roadmap-step { padding: 10px 8px; }
+            .navbar-links a:not(.back-home) { display: none; }
+        }
 
-            .page-title {
-                font-size: 2rem;
-            }
-
-            .progress-card {
-                padding: 20px;
-                gap: 20px;
-            }
-
-            .chapter-card {
-                padding: 20px;
-            }
-
-            .chapter-header {
-                flex-wrap: wrap;
-            }
-
-            .chapter-icon {
-                margin-left: 0;
-            }
-
-            .tips-section {
-                padding: 25px 20px;
-            }
-
-            .navbar-links a:not(.back-home) {
-                display: none;
-            }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 1.7rem; }
+            .hero-stat-num { font-size: 1.5rem; }
+            .resources-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -591,26 +710,42 @@
     <!-- 导航栏 -->
     <nav class="navbar">
         <div class="navbar-content">
-            <a href="index.html" class="navbar-logo">🌸 冬怡的小窝</a>
+            <a href="python.html" class="navbar-logo">
+                <span class="logo-python">🐍</span> 冬怡的Python学习站
+            </a>
             <ul class="navbar-links">
-                <li><a href="index.html#about">关于我</a></li>
-                <li><a href="index.html#education">教育经历</a></li>
-                <li><a href="index.html#hobby">兴趣爱好</a></li>
-                <li><a href="python.html" class="active">Python课程</a></li>
-                <li><a href="index.html" class="back-home">← 返回首页</a></li>
+                <li><a href="#home" class="active">首页</a></li>
+                <li><a href="#courses">课程大纲</a></li>
+                <li><a href="#roadmap">学习路线</a></li>
+                <li><a href="#tips">学习贴士</a></li>
+                <li><a href="#resources">推荐资源</a></li>
+                <li><a href="index.html" class="back-home">🏠 返回个人主页</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- 页面头部 -->
-    <header class="page-header">
-        <h1 class="page-title">
-            <span class="python-icon">🐍</span> Python基础课程
-        </h1>
-        <p class="page-subtitle">
-            从零开始学习Python编程，掌握数据分析的核心技能！<br>
-            每一章都是通往编程世界的小阶梯 ✨
+    <!-- Hero Banner -->
+    <header class="hero" id="home">
+        <div class="hero-badge">✨ 跟着冬怡一起学Python</div>
+        <h1 class="hero-title">Python基础课程</h1>
+        <p class="hero-subtitle">
+            从零开始，循序渐进，掌握Python编程核心技能。<br>
+            每一章都是通往编程世界的小阶梯，加油吧！💪
         </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-num">5</div>
+                <div class="hero-stat-label">核心章节</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">30+</div>
+                <div class="hero-stat-label">知识点</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">∞</div>
+                <div class="hero-stat-label">学习乐趣</div>
+            </div>
+        </div>
     </header>
 
     <!-- 学习进度 -->
@@ -633,10 +768,9 @@
         </div>
     </div>
 
-    <!-- 课程章节 -->
-    <section class="section">
+    <!-- 课程大纲 -->
+    <section class="section" id="courses">
         <h2 class="section-title fade-in">课程大纲</h2>
-        
         <div class="chapters-grid">
             <!-- 第一章 -->
             <div class="chapter-card fade-in">
@@ -748,36 +882,117 @@
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- 学习小贴士 -->
+    <!-- 学习路线图 -->
+    <section class="section" id="roadmap">
+        <h2 class="section-title fade-in">学习路线</h2>
+        <div class="roadmap-section fade-in">
+            <h3 class="roadmap-title">🗺️ 从入门到进阶的学习路径</h3>
+            <div class="roadmap">
+                <div class="roadmap-step">
+                    <div class="roadmap-step-icon">🔤</div>
+                    <div class="roadmap-step-name">基础语法</div>
+                </div>
+                <div class="roadmap-arrow">→</div>
+                <div class="roadmap-step">
+                    <div class="roadmap-step-icon">📦</div>
+                    <div class="roadmap-step-name">数据结构</div>
+                </div>
+                <div class="roadmap-arrow">→</div>
+                <div class="roadmap-step">
+                    <div class="roadmap-step-icon">⚡</div>
+                    <div class="roadmap-step-name">函数模块</div>
+                </div>
+                <div class="roadmap-arrow">→</div>
+                <div class="roadmap-step">
+                    <div class="roadmap-step-icon">🏗️</div>
+                    <div class="roadmap-step-name">面向对象</div>
+                </div>
+                <div class="roadmap-arrow">→</div>
+                <div class="roadmap-step">
+                    <div class="roadmap-step-icon">📁</div>
+                    <div class="roadmap-step-name">文件异常</div>
+                </div>
+                <div class="roadmap-arrow">→</div>
+                <div class="roadmap-step">
+                    <div class="roadmap-step-icon">🎉</div>
+                    <div class="roadmap-step-name">毕业啦！</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 学习小贴士 -->
+    <section class="section" id="tips">
+        <h2 class="section-title fade-in">学习贴士</h2>
         <div class="tips-section fade-in">
-            <h3 class="tips-title">💡 学习小贴士</h3>
+            <h3 class="tips-title">💡 高效学习小秘诀</h3>
             <div class="tips-grid">
                 <div class="tip-item">
                     <div class="tip-icon">✍️</div>
-                    <div class="tip-text">多动手敲代码<br>实践出真知</div>
+                    <div class="tip-title">多动手敲代码</div>
+                    <div class="tip-text">看懂不等于会写，一定要亲自敲一遍代码，实践出真知！</div>
                 </div>
                 <div class="tip-item">
                     <div class="tip-icon">🐛</div>
-                    <div class="tip-text">不怕报错<br>错误是最好的老师</div>
+                    <div class="tip-title">不怕报错</div>
+                    <div class="tip-text">报错不可怕，学会阅读错误信息，它就是你最好的老师！</div>
                 </div>
                 <div class="tip-item">
                     <div class="tip-icon">📝</div>
-                    <div class="tip-text">做好笔记<br>记录学习心得</div>
+                    <div class="tip-title">做好学习笔记</div>
+                    <div class="tip-text">记录每个知识点的理解和心得，方便日后复习回顾！</div>
                 </div>
                 <div class="tip-item">
                     <div class="tip-icon">🎯</div>
-                    <div class="tip-text">设定小目标<br>一步步前进</div>
+                    <div class="tip-title">设定小目标</div>
+                    <div class="tip-text">把大目标拆成小任务，每天进步一点点，积少成多！</div>
                 </div>
+                <div class="tip-item">
+                    <div class="tip-icon">🤝</div>
+                    <div class="tip-title">多交流讨论</div>
+                    <div class="tip-text">和同学朋友一起学习讨论，互相帮助进步更快！</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">🔄</div>
+                    <div class="tip-title">反复复习</div>
+                    <div class="tip-text">温故而知新，定期回顾之前学过的内容，巩固记忆！</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 推荐资源 -->
+    <section class="section" id="resources">
+        <h2 class="section-title fade-in">推荐资源</h2>
+        <div class="resources-grid">
+            <div class="resource-card fade-in">
+                <div class="resource-icon">📖</div>
+                <div class="resource-name">Python官方文档</div>
+                <div class="resource-desc">最权威的Python学习资料，包含完整的语言参考和标准库文档。</div>
+            </div>
+            <div class="resource-card fade-in">
+                <div class="resource-icon">🎬</div>
+                <div class="resource-name">B站视频教程</div>
+                <div class="resource-desc">丰富的免费Python视频教程，适合喜欢看视频学习的同学。</div>
+            </div>
+            <div class="resource-card fade-in">
+                <div class="resource-icon">💻</div>
+                <div class="resource-name">在线练习平台</div>
+                <div class="resource-desc">LeetCode、牛客网等平台，边学边练提升编程能力。</div>
             </div>
         </div>
     </section>
 
     <!-- 页脚 -->
     <footer class="footer">
-        <p class="footer-text">
-            用 <span class="footer-heart">❤</span> 制作 · 何冬怡的学习空间
-        </p>
+        <div class="footer-brand">🐍 冬怡的Python学习站</div>
+        <p class="footer-text">用 <span class="footer-heart">❤</span> 制作 · 跟着冬怡一起学编程</p>
+        <div class="footer-links">
+            <a href="index.html">🏠 个人主页</a>
+            <a href="#home">⬆ 回到顶部</a>
+        </div>
     </footer>
 
     <!-- 回到顶部按钮 -->
@@ -787,7 +1002,7 @@
         // ========== 飘落装饰 ==========
         function createFallingDecorations() {
             const container = document.getElementById('fallingDecorations');
-            const items = ['🐍', '💻', '✨', '📝', '💡', '⭐', '🎯', '📚'];
+            const items = ['🐍', '💻', '✨', '📝', '💡', '⭐', '🎯', '📚', '🚀', '🎨'];
             
             function createItem() {
                 const item = document.createElement('span');
@@ -798,64 +1013,64 @@
                 item.style.animationDuration = (Math.random() * 8 + 8) + 's';
                 item.style.animationDelay = Math.random() * 3 + 's';
                 container.appendChild(item);
-
-                setTimeout(() => {
-                    item.remove();
-                }, 16000);
+                setTimeout(() => item.remove(), 16000);
             }
 
-            for (let i = 0; i < 6; i++) {
-                setTimeout(createItem, i * 800);
-            }
-
+            for (let i = 0; i < 6; i++) setTimeout(createItem, i * 800);
             setInterval(createItem, 2500);
         }
-
         createFallingDecorations();
 
         // ========== 滚动动画 ==========
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
         // ========== 进度条动画 ==========
         setTimeout(() => {
-            // 这里可以后续添加学习进度统计功能
-            // 目前默认显示0%
             document.getElementById('progressBar').style.width = '0%';
         }, 500);
 
         // ========== 回到顶部 ==========
         const backToTop = document.getElementById('backToTop');
-        
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTop.classList.add('show');
-            } else {
-                backToTop.classList.remove('show');
-            }
+            backToTop.classList.toggle('show', window.scrollY > 300);
         });
-
         backToTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         // ========== 导航栏平滑滚动 ==========
-        document.querySelectorAll('.navbar-links a[href^="#"]').forEach(link => {
+        document.querySelectorAll('.navbar-links a').forEach(link => {
             link.addEventListener('click', (e) => {
                 const href = link.getAttribute('href');
-                if (href.startsWith('#') && href.length > 1) {
+                if (href.startsWith('#')) {
                     e.preventDefault();
                     const target = document.querySelector(href);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ========== 导航高亮 ==========
+        const sections = document.querySelectorAll('section[id], header[id]');
+        const navLinks = document.querySelectorAll('.navbar-links a[href^="#"]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
                 }
             });
         });
