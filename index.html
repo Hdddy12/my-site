@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>何冬怡的个人主页 ✨</title>
+    <style>
+        /* ========== 全局样式 ========== */
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pink-light: #ffe4f0;
+            --pink-main: #ff8fbf;
+            --pink-dark: #ff5c9e;
+            --pink-deeper: #e84580;
+            --lavender: #e8d5f5;
+            --white: #fff9fb;
+            --cream: #fff0f5;
+            --text-dark: #5a3e4b;
+            --text-light: #8b6b7a;
+            --shadow-pink: rgba(255, 143, 191, 0.3);
+            --shadow-soft: rgba(232, 213, 245, 0.4);
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        /* ========== 滚动条美化 ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--pink-light);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--pink-main);
+            border-radius: 10px;
+        }
+
+        /* ========== 飘落装饰 ========== */
+        .falling-decorations {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .falling-item {
+            position: absolute;
+            top: -50px;
+            animation: fall linear infinite;
+            opacity: 0.6;
+            font-size: 20px;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ========== 导航栏 ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 12px 0;
+            box-shadow: 0 2px 20px var(--shadow-pink);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+
+        .navbar-logo {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.4rem;
+            color: var(--pink-dark);
+            text-decoration: none;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .navbar-links a:hover {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+            transform: translateY(-2px);
+        }
+
+        /* ========== Banner 区域 ========== */
+        .banner {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .banner-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(1.05);
+        }
+
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 143, 191, 0.3), rgba(232, 213, 245, 0.4));
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            animation: fadeInUp 1s ease;
+        }
+
+        .avatar-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 8px 30px var(--shadow-pink);
+            overflow: hidden;
+            animation: float 3s ease-in-out infinite;
+            background: white;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .banner-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 3rem;
+            color: white;
+            text-shadow: 0 3px 15px rgba(255, 92, 158, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .banner-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            letter-spacing: 2px;
+        }
+
+        /* ========== 通用 Section 样式 ========== */
+        .section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.8rem;
+            color: var(--pink-dark);
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '✿';
+            display: block;
+            font-size: 1rem;
+            color: var(--pink-main);
+            margin-top: 5px;
+        }
+
+        /* ========== 关于我 ========== */
+        .about-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 8px 40px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 143, 191, 0.1), transparent);
+            border-radius: 50%;
+        }
+
+        .about-text {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: var(--text-dark);
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-text .highlight {
+            color: var(--pink-dark);
+            font-weight: 700;
+        }
+
+        .about-text .emoji {
+            font-size: 1.2rem;
+        }
+
+        /* ========== 信息卡片网格 ========== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 6px 25px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 40px var(--shadow-pink);
+            border-color: var(--pink-main);
+        }
+
+        .info-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .info-card-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        .info-card-value {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.15rem;
+            color: var(--pink-dark);
+        }
+
+        /* ========== 兴趣爱好 ========== */
+        .hobby-section {
+            background: linear-gradient(135deg, var(--pink-light), var(--lavender));
+            border-radius: 30px;
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hobby-section::before {
+            content: '💃';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 3rem;
+            opacity: 0.3;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .hobby-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hobby-image {
+            width: 280px;
+            height: 280px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 35px var(--shadow-pink);
+            border: 4px solid white;
+            flex-shrink: 0;
+        }
+
+        .hobby-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .hobby-image:hover img {
+            transform: scale(1.1);
+        }
+
+        .hobby-text h3 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.6rem;
+            color: var(--pink-dark);
+            margin-bottom: 15px;
+        }
+
+        .hobby-text p {
+            font-size: 1rem;
+            line-height: 2;
+            color: var(--text-dark);
+        }
+
+        .hobby-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .hobby-tag {
+            background: white;
+            color: var(--pink-dark);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 3px 10px var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+
+        .hobby-tag:hover {
+            background: var(--pink-main);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* ========== 技能 ========== */
+        .skills-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .skill-item {
+            background: white;
+            border-radius: 16px;
+            padding: 24px 30px;
+            box-shadow: 0 4px 20px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            border-color: var(--pink-main);
+            box-shadow: 0 6px 30px var(--shadow-pink);
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .skill-name .skill-emoji {
+            margin-right: 8px;
+        }
+
+        .skill-percent {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            color: var(--pink-dark);
+            font-size: 1rem;
+        }
+
+        .skill-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: var(--pink-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--pink-main), var(--pink-dark), var(--lavender));
+            background-size: 200% 100%;
+            animation: shimmer 2s ease-in-out infinite;
+            transition: width 1.5s ease;
+            width: 0;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ========== 时间线（教育经历） ========== */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--pink-main), var(--lavender));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 35px;
+            background: white;
+            border-radius: 20px;
+            padding: 25px 30px;
+            box-shadow: 0 5px 25px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 35px var(--shadow-pink);
+            border-color: var(--pink-main);
+        }
+
+        .timeline-item::before {
+            content: '🌸';
+            position: absolute;
+            left: -33px;
+            top: 25px;
+            font-size: 1.2rem;
+            background: white;
+            border-radius: 50%;
+            padding: 2px;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--pink-main);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .timeline-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.2rem;
+            color: var(--pink-dark);
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* ========== 未来展望 ========== */
+        .future-card {
+            background: linear-gradient(135deg, #fff0f5, #f5e6ff, #ffe4f0);
+            border-radius: 24px;
+            padding: 45px;
+            text-align: center;
+            box-shadow: 0 10px 40px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .future-card::before,
+        .future-card::after {
+            content: '✨';
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.4;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .future-card::before {
+            top: 20px;
+            left: 30px;
+        }
+
+        .future-card::after {
+            bottom: 20px;
+            right: 30px;
+            animation-delay: 1s;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.3); }
+        }
+
+        .future-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.5rem;
+            color: var(--pink-dark);
+            margin-bottom: 20px;
+        }
+
+        .future-text {
+            font-size: 1.05rem;
+            line-height: 2.2;
+            color: var(--text-dark);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .future-dreams {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .dream-item {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            box-shadow: 0 4px 15px var(--shadow-soft);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .dream-item:hover {
+            border-color: var(--pink-main);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px var(--shadow-pink);
+        }
+
+        /* ========== 页脚 ========== */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(to top, var(--pink-light), transparent);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .footer-heart {
+            color: var(--pink-dark);
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.25); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+        }
+
+        .footer-emoji {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            display: block;
+        }
+
+        /* ========== 动画 ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== 回到顶部按钮 ========== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--pink-main);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px var(--shadow-pink);
+            transition: all 0.3s ease;
+            z-index: 99;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top:hover {
+            background: var(--pink-dark);
+            transform: translateY(-3px);
+        }
+
+        .back-to-top.show {
+            display: flex;
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 768px) {
+            .banner {
+                height: 420px;
+            }
+
+            .banner-title {
+                font-size: 2.2rem;
+            }
+
+            .banner-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .avatar-container {
+                width: 120px;
+                height: 120px;
+            }
+
+            .navbar-links {
+                gap: 2px;
+            }
+
+            .navbar-links a {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+
+            .section {
+                padding: 40px 20px;
+            }
+
+            .about-card {
+                padding: 25px;
+            }
+
+            .hobby-content {
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            .hobby-image {
+                width: 220px;
+                height: 220px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .future-card {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .banner {
+                height: 380px;
+            }
+
+            .banner-title {
+                font-size: 1.8rem;
+            }
+
+            .navbar-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 飘落装饰 -->
+    <div class="falling-decorations" id="fallingDecorations"></div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-content">
+            <a href="#" class="navbar-logo">🌸 冬怡的小窝</a>
+            <ul class="navbar-links">
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#education">教育经历</a></li>
+                <li><a href="#hobby">兴趣爱好</a></li>
+                <li><a href="#skills">技能</a></li>
+                <li><a href="#future">未来展望</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Banner -->
+    <section class="banner">
+        <img src="assets/banner-cute.jpg" alt="banner" class="banner-bg">
+        <div class="banner-overlay"></div>
+        <div class="banner-content">
+            <div class="avatar-container">
+                <img src="assets/avatar-cute.jpg" alt="何冬怡的头像">
+            </div>
+            <h1 class="banner-title">何冬怡</h1>
+            <p class="banner-subtitle">🌷 来自广东 · 商务数据分析与应用 · 热爱生活与舞蹈</p>
+        </div>
+    </section>
+
+    <!-- 关于我 -->
+    <section class="section" id="about">
+        <h2 class="section-title fade-in">关于我</h2>
+        <div class="about-card fade-in">
+            <p class="about-text">
+                <span class="emoji">👋</span> 嗨！你好呀～ 我是<span class="highlight">何冬怡</span>，一个来自<span class="highlight">广东</span>的开朗女孩！<br><br>
+                <span class="emoji">🎓</span> 目前在<span class="highlight">广东科学职业技术学院</span>就读，学习<span class="highlight">商务数据分析与应用</span>专业。我喜欢用数据去发现生活中的有趣规律，也享受从数字中找到故事的过程～<br><br>
+                <span class="emoji">💖</span> 课余时间我最喜欢的事情就是<span class="highlight">跳舞</span>！音乐响起的那一刻，所有的烦恼都会消失，只剩下快乐和自由～<br><br>
+                <span class="emoji">✨</span> 我相信，认真生活的人，生活也会认真对待你。希望在这个小角落，你能感受到我的热情与温暖！
+            </p>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card fade-in">
+                <span class="info-card-icon">📍</span>
+                <div class="info-card-label">来自</div>
+                <div class="info-card-value">广东</div>
+            </div>
+            <div class="info-card fade-in">
+                <span class="info-card-icon">🏫</span>
+                <div class="info-card-label">学校</div>
+                <div class="info-card-value">广东科学职业技术学院</div>
+            </div>
+            <div class="info-card fade-in">
+                <span class="info-card-icon">📚</span>
+                <div class="info-card-label">专业</div>
+                <div class="info-card-value">商务数据分析与应用</div>
+            </div>
+            <div class="info-card fade-in">
+                <span class="info-card-icon">💃</span>
+                <div class="info-card-label">热爱</div>
+                <div class="info-card-value">跳舞</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 教育经历 -->
+    <section class="section" id="education">
+        <h2 class="section-title fade-in">教育经历</h2>
+        <div class="timeline">
+            <div class="timeline-item fade-in">
+                <div class="timeline-date">在读</div>
+                <div class="timeline-title">广东科学职业技术学院</div>
+                <div class="timeline-desc">
+                    📖 专业：商务数据分析与应用<br>
+                    📊 学习内容：数据采集与处理、数据分析方法、商务数据可视化、Python数据分析、市场调研与预测等<br>
+                    💡 在这里，我学会了用数据的眼光看世界，也遇到了一群超棒的小伙伴！
+                </div>
+            </div>
+            <div class="timeline-item fade-in">
+                <div class="timeline-date">成长中</div>
+                <div class="timeline-title">持续学习 · 不断进步</div>
+                <div class="timeline-desc">
+                    🌱 课外自学：不断拓展数据分析技能，探索更多工具和方法<br>
+                    💃 坚持舞蹈训练，在舞台上绽放自信的光芒<br>
+                    🌟 积极参加校园活动，丰富自己的大学生活
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 兴趣爱好 -->
+    <section class="section" id="hobby">
+        <h2 class="section-title fade-in">兴趣爱好</h2>
+        <div class="hobby-section fade-in">
+            <div class="hobby-content">
+                <div class="hobby-image">
+                    <img src="assets/dance-cute.jpg" alt="跳舞">
+                </div>
+                <div class="hobby-text">
+                    <h3>💃 跳舞是我最大的热爱</h3>
+                    <p>
+                        从小就喜欢跟着音乐舞动的我，跳舞已经成为生活中不可或缺的一部分。
+                        无论是欢快的流行舞，还是优雅的古典舞，每一个节拍都让我感到无比快乐！
+                        舞台上的那一刻，是我最闪耀的时光 ✨
+                    </p>
+                    <div class="hobby-tags">
+                        <span class="hobby-tag">🎵 流行舞</span>
+                        <span class="hobby-tag">🦢 古典舞</span>
+                        <span class="hobby-tag">🔥 街舞</span>
+                        <span class="hobby-tag">🎬 舞台表演</span>
+                        <span class="hobby-tag">🎶 音乐</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技能 -->
+    <section class="section" id="skills">
+        <h2 class="section-title fade-in">技能特长</h2>
+        <div class="skills-container">
+            <div class="skill-item fade-in">
+                <div class="skill-header">
+                    <span class="skill-name"><span class="skill-emoji">📊</span>数据分析</span>
+                    <span class="skill-percent">85%</span>
+                </div>
+                <div class="skill-bar-bg">
+                    <div class="skill-bar-fill" data-width="85"></div>
+                </div>
+            </div>
+            <div class="skill-item fade-in">
+                <div class="skill-header">
+                    <span class="skill-name"><span class="skill-emoji">🐍</span>Python</span>
+                    <span class="skill-percent">75%</span>
+                </div>
+                <div class="skill-bar-bg">
+                    <div class="skill-bar-fill" data-width="75"></div>
+                </div>
+            </div>
+            <div class="skill-item fade-in">
+                <div class="skill-header">
+                    <span class="skill-name"><span class="skill-emoji">📈</span>Excel / 数据可视化</span>
+                    <span class="skill-percent">80%</span>
+                </div>
+                <div class="skill-bar-bg">
+                    <div class="skill-bar-fill" data-width="80"></div>
+                </div>
+            </div>
+            <div class="skill-item fade-in">
+                <div class="skill-header">
+                    <span class="skill-name"><span class="skill-emoji">💃</span>舞蹈</span>
+                    <span class="skill-percent">95%</span>
+                </div>
+                <div class="skill-bar-bg">
+                    <div class="skill-bar-fill" data-width="95"></div>
+                </div>
+            </div>
+            <div class="skill-item fade-in">
+                <div class="skill-header">
+                    <span class="skill-name"><span class="skill-emoji">🎨</span>创意设计</span>
+                    <span class="skill-percent">70%</span>
+                </div>
+                <div class="skill-bar-bg">
+                    <div class="skill-bar-fill" data-width="70"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 未来展望 -->
+    <section class="section" id="future">
+        <h2 class="section-title fade-in">未来展望</h2>
+        <div class="future-card fade-in">
+            <div class="future-title">🌟 我的梦想与目标</div>
+            <p class="future-text">
+                未来，我希望能够将<span style="color: var(--pink-dark); font-weight: 700;">数据分析</span>与<span style="color: var(--pink-dark); font-weight: 700;">舞蹈艺术</span>结合起来，
+                用数据去理解更多有趣的事物，用舞蹈去表达内心的热爱。<br>
+                我相信，只要保持热情、持续努力，一切美好的事情都会发生！🌈
+            </p>
+            <div class="future-dreams">
+                <span class="dream-item">🎯 成为优秀的数据分析师</span>
+                <span class="dream-item">💃 在更大的舞台上跳舞</span>
+                <span class="dream-item">🌏 去更多地方看世界</span>
+                <span class="dream-item">📖 不断学习新技能</span>
+                <span class="dream-item">😊 做一个温暖的人</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p class="footer-text">
+            用 <span class="footer-heart">❤</span> 制作 · 何冬怡的个人主页
+        </p>
+        <span class="footer-emoji">🌸 🌷 ✨ 🌸 🌷 ✨</span>
+    </footer>
+
+    <!-- 回到顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+
+    <script>
+        // ========== 飘落装饰 ==========
+        function createFallingDecorations() {
+            const container = document.getElementById('fallingDecorations');
+            const items = ['🌸', '💕', '✨', '🌷', '💖', '🦋', '⭐', '🎀'];
+            
+            function createItem() {
+                const item = document.createElement('span');
+                item.className = 'falling-item';
+                item.textContent = items[Math.floor(Math.random() * items.length)];
+                item.style.left = Math.random() * 100 + '%';
+                item.style.fontSize = (Math.random() * 15 + 12) + 'px';
+                item.style.animationDuration = (Math.random() * 6 + 6) + 's';
+                item.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(item);
+
+                setTimeout(() => {
+                    item.remove();
+                }, 14000);
+            }
+
+            // 初始创建一批
+            for (let i = 0; i < 8; i++) {
+                setTimeout(createItem, i * 500);
+            }
+
+            // 持续创建
+            setInterval(createItem, 2000);
+        }
+
+        createFallingDecorations();
+
+        // ========== 滚动动画 ==========
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // 技能条动画
+                    const skillBars = entry.target.querySelectorAll('.skill-bar-fill');
+                    skillBars.forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        setTimeout(() => {
+                            bar.style.width = width + '%';
+                        }, 300);
+                    });
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ========== 回到顶部 ==========
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ========== 导航栏平滑滚动 ==========
+        document.querySelectorAll('.navbar-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ========== 导航栏滚动效果 ==========
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScroll = window.scrollY;
+            
+            if (currentScroll > 100) {
+                navbar.style.padding = '8px 0';
+            } else {
+                navbar.style.padding = '12px 0';
+            }
+            
+            lastScroll = currentScroll;
+        });
+    </script>
+
+</body>
+</html>
