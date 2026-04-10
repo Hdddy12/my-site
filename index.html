@@ -615,6 +615,110 @@
             box-shadow: 0 8px 25px var(--shadow-pink);
         }
 
+        /* ========== Python学习入口 ========== */
+        .python-entry {
+            background: linear-gradient(135deg, #e8f4fd, #f0e6ff, #ffe4f0);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 40px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .python-entry::before {
+            content: '💻';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2.5rem;
+            opacity: 0.2;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .python-entry-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .python-icon-wrapper {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--pink-main), var(--lavender));
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 8px 25px var(--shadow-pink);
+        }
+
+        .python-big-icon {
+            font-size: 3rem;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        .python-entry-text {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .python-entry-text h3 {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.5rem;
+            color: var(--pink-dark);
+            margin-bottom: 10px;
+        }
+
+        .python-entry-text p {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .python-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .python-topics span {
+            background: white;
+            color: var(--text-dark);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 8px var(--shadow-soft);
+        }
+
+        .python-enter-btn {
+            background: linear-gradient(135deg, var(--pink-main), var(--pink-dark));
+            color: white;
+            padding: 14px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 5px 20px var(--shadow-pink);
+            transition: all 0.3s ease;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .python-enter-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px var(--shadow-pink);
+        }
+
         /* ========== 页脚 ========== */
         .footer {
             text-align: center;
@@ -785,6 +889,7 @@
                 <li><a href="#education">教育经历</a></li>
                 <li><a href="#hobby">兴趣爱好</a></li>
                 <li><a href="#skills">技能</a></li>
+                <li><a href="python.html">🐍 Python课程</a></li>
                 <li><a href="#future">未来展望</a></li>
             </ul>
         </div>
@@ -939,6 +1044,32 @@
                 <div class="skill-bar-bg">
                     <div class="skill-bar-fill" data-width="70"></div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Python学习入口 -->
+    <section class="section" id="python">
+        <h2 class="section-title fade-in">学习空间</h2>
+        <div class="python-entry fade-in">
+            <div class="python-entry-content">
+                <div class="python-icon-wrapper">
+                    <span class="python-big-icon">🐍</span>
+                </div>
+                <div class="python-entry-text">
+                    <h3>Python基础课程</h3>
+                    <p>从零开始学习Python编程，掌握数据分析的核心技能！<br>包含8个章节，循序渐进带你入门编程世界 ✨</p>
+                    <div class="python-topics">
+                        <span>📦 变量与数据类型</span>
+                        <span>🔀 条件语句</span>
+                        <span>🔄 循环语句</span>
+                        <span>⚡ 函数</span>
+                        <span>📋 列表与字典</span>
+                    </div>
+                </div>
+                <a href="python.html" class="python-enter-btn">
+                    开始学习 →
+                </a>
             </div>
         </div>
     </section>

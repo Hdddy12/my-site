@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python基础课程 🐍 - 何冬怡的学习空间</title>
+    <style>
+        /* ========== 全局样式 ========== */
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pink-light: #ffe4f0;
+            --pink-main: #ff8fbf;
+            --pink-dark: #ff5c9e;
+            --pink-deeper: #e84580;
+            --lavender: #e8d5f5;
+            --white: #fff9fb;
+            --cream: #fff0f5;
+            --text-dark: #5a3e4b;
+            --text-light: #8b6b7a;
+            --shadow-pink: rgba(255, 143, 191, 0.3);
+            --shadow-soft: rgba(232, 213, 245, 0.4);
+            --python-blue: #3776ab;
+            --python-yellow: #ffd43b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        /* ========== 滚动条美化 ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--pink-light);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--pink-main);
+            border-radius: 10px;
+        }
+
+        /* ========== 飘落装饰 ========== */
+        .falling-decorations {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .falling-item {
+            position: absolute;
+            top: -50px;
+            animation: fall linear infinite;
+            opacity: 0.5;
+            font-size: 18px;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ========== 导航栏 ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 12px 0;
+            box-shadow: 0 2px 20px var(--shadow-pink);
+        }
+
+        .navbar-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+
+        .navbar-logo {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.4rem;
+            color: var(--pink-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .navbar-links a:hover,
+        .navbar-links a.active {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+        }
+
+        .back-home {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--pink-main);
+            color: white !important;
+            padding: 6px 16px !important;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-home:hover {
+            background: var(--pink-dark) !important;
+            transform: translateX(-3px);
+        }
+
+        /* ========== 页面头部 ========== */
+        .page-header {
+            background: linear-gradient(135deg, var(--pink-light), var(--lavender));
+            padding: 100px 30px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '🐍';
+            position: absolute;
+            top: 80px;
+            left: 10%;
+            font-size: 3rem;
+            opacity: 0.2;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .page-header::after {
+            content: '💻';
+            position: absolute;
+            top: 100px;
+            right: 12%;
+            font-size: 2.5rem;
+            opacity: 0.2;
+            animation: float 4s ease-in-out infinite 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .page-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 2.5rem;
+            color: var(--pink-dark);
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title .python-icon {
+            display: inline-block;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== 学习进度 ========== */
+        .progress-section {
+            max-width: 900px;
+            margin: -30px auto 0;
+            padding: 0 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .progress-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 35px;
+            box-shadow: 0 8px 30px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .progress-info {
+            text-align: center;
+        }
+
+        .progress-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .progress-value {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.8rem;
+            color: var(--pink-dark);
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 16px;
+            background: var(--pink-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--pink-main), var(--pink-dark));
+            width: 0%;
+            transition: width 1.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* ========== 课程章节 ========== */
+        .section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.6rem;
+            color: var(--pink-dark);
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '📚';
+            display: block;
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        /* ========== 章节卡片 ========== */
+        .chapters-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .chapter-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 30px;
+            box-shadow: 0 5px 25px var(--shadow-soft);
+            border: 2px solid var(--pink-light);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-pink);
+            border-color: var(--pink-main);
+        }
+
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--pink-main), var(--lavender));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chapter-card:hover::before {
+            opacity: 1;
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .chapter-number {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--pink-main), var(--pink-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .chapter-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+        }
+
+        .chapter-icon {
+            font-size: 1.5rem;
+            margin-left: auto;
+        }
+
+        .chapter-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .chapter-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topic-tag {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .topic-tag:hover {
+            background: var(--pink-main);
+            color: white;
+        }
+
+        .chapter-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: var(--lavender);
+            color: #7c5c9c;
+        }
+
+        .status-learning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-done {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* ========== 学习小贴士 ========== */
+        .tips-section {
+            background: linear-gradient(135deg, var(--pink-light), var(--lavender));
+            border-radius: 25px;
+            padding: 40px;
+            margin-top: 20px;
+        }
+
+        .tips-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1.3rem;
+            color: var(--pink-dark);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .tip-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+
+        .tip-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow-pink);
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .tip-text {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* ========== 页脚 ========== */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(to top, var(--pink-light), transparent);
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .footer-heart {
+            color: var(--pink-dark);
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.25); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+        }
+
+        /* ========== 回到顶部按钮 ========== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--pink-main);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px var(--shadow-pink);
+            transition: all 0.3s ease;
+            z-index: 99;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top:hover {
+            background: var(--pink-dark);
+            transform: translateY(-3px);
+        }
+
+        .back-to-top.show {
+            display: flex;
+        }
+
+        /* ========== 动画 ========== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 90px 20px 50px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .progress-card {
+                padding: 20px;
+                gap: 20px;
+            }
+
+            .chapter-card {
+                padding: 20px;
+            }
+
+            .chapter-header {
+                flex-wrap: wrap;
+            }
+
+            .chapter-icon {
+                margin-left: 0;
+            }
+
+            .tips-section {
+                padding: 25px 20px;
+            }
+
+            .navbar-links a:not(.back-home) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 飘落装饰 -->
+    <div class="falling-decorations" id="fallingDecorations"></div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-logo">🌸 冬怡的小窝</a>
+            <ul class="navbar-links">
+                <li><a href="index.html#about">关于我</a></li>
+                <li><a href="index.html#education">教育经历</a></li>
+                <li><a href="index.html#hobby">兴趣爱好</a></li>
+                <li><a href="python.html" class="active">Python课程</a></li>
+                <li><a href="index.html" class="back-home">← 返回首页</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 页面头部 -->
+    <header class="page-header">
+        <h1 class="page-title">
+            <span class="python-icon">🐍</span> Python基础课程
+        </h1>
+        <p class="page-subtitle">
+            从零开始学习Python编程，掌握数据分析的核心技能！<br>
+            每一章都是通往编程世界的小阶梯 ✨
+        </p>
+    </header>
+
+    <!-- 学习进度 -->
+    <div class="progress-section">
+        <div class="progress-card fade-in">
+            <div class="progress-info">
+                <div class="progress-label">已学习章节</div>
+                <div class="progress-value" id="learnedCount">0 / 8</div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+                <div class="progress-text">继续加油，你离Python高手越来越近啦！💪</div>
+            </div>
+            <div class="progress-info">
+                <div class="progress-label">学习进度</div>
+                <div class="progress-value" id="progressPercent">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 课程章节 -->
+    <section class="section">
+        <h2 class="section-title fade-in">课程大纲</h2>
+        
+        <div class="chapters-grid">
+            <!-- 第一章 -->
+            <div class="chapter-card fade-in">
+                <span class="chapter-status status-pending">待学习</span>
+                <div class="chapter-header">
+                    <div class="chapter-number">01</div>
+                    <div class="chapter-title">Python简介与环境搭建</div>
+                    <span class="chapter-icon">🚀</span>
+                </div>
+                <p class="chapter-desc">
+                    认识Python这门优雅的编程语言，了解它的特点和应用领域，
+                    并在你的电脑上搭建Python开发环境，迈出编程第一步！
+                </p>
+                <div class="chapter-topics">
+                    <span class="topic-tag">Python历史</span>
+                    <span class="topic-tag">安装Python</span>
+                    <span class="topic-tag">IDE选择</span>
+                    <span class="topic-tag">Hello World</span>
+                </div>
+            </div>
+
+            <!-- 第二章 -->
+            <div class="chapter-card fade-in">
+                <span class="chapter-status status-pending">待学习</span>
+                <div class="chapter-header">
+                    <div class="chapter-number">02</div>
+                    <div class="chapter-title">变量与数据类型</div>
+                    <span class="chapter-icon">📦</span>
+                </div>
+                <p class="chapter-desc">
+                    学习如何使用变量存储数据，了解Python中的基本数据类型：
+                    整数、浮点数、字符串、布尔值，为后续学习打下坚实基础！
+                </p>
+                <div class="chapter-topics">
+                    <span class="topic-tag">变量命名</span>
+                    <span class="topic-tag">int整数</span>
+                    <span class="topic-tag">float浮点数</span>
+                    <span class="topic-tag">str字符串</span>
+                    <span class="topic-tag">bool布尔值</span>
+                    <span class="topic-tag">type()函数</span>
+                </div>
+            </div>
+
+            <!-- 第三章 -->
+            <div class="chapter-card fade-in">
+                <span class="chapter-status status-pending">待学习</span>
+                <div class="chapter-header">
+                    <div class="chapter-number">03</div>
+                    <div class="chapter-title">运算符</div>
+                    <span class="chapter-icon">➕</span>
+                </div>
+                <p class="chapter-desc">
+                    掌握Python中的各类运算符，包括算术运算、比较运算、
+                    逻辑运算等，让程序能够进行各种计算和判断操作！
+                </p>
+                <div class="chapter-topics">
+                    <span class="topic-tag">算术运算符</span>
+                    <span class="topic-tag">比较运算符</span>
+                    <span class="topic-tag">赋值运算符</span>
+                    <span class="topic-tag">逻辑运算符</span>
+                    <span class="topic-tag">运算优先级</span>
+                </div>
+            </div>
+
+            <!-- 第四章 -->
+            <div class="chapter-card fade-in">
+                <span class="chapter-status status-pending">待学习</span>
+                <div class="chapter-header">
+                    <div class="chapter-number">04</div>
+                    <div class="chapter-title">条件语句</div>
+                    <span class="chapter-icon">🔀</span>
+                </div>
+                <p class="chapter-desc">
+                    学习使用if、elif、else语句让程序根据不同条件执行不同的代码，
+                    这是程序逻辑控制的基础，让程序学会"思考"！
+                </p>
+                <div class="chapter-topics">
+                    <span class="topic-tag">if语句</span>
+                    <span class="topic-tag">if-else</span>
+                    <span class="topic-tag">if-elif-else</span>
+                    <span class="topic-tag">嵌套判断</span>
+                    <span class="topic-tag">条件表达式</span>
+                </div>
+            </div>
+
+            <!-- 第五章 -->
+            <div class="chapter-card fade-in">
+                <span class="chapter-status status-pending">待学习</span>
+                <div class="chapter-header">
+                    <div class="chapter-number">05</div>
+                    <div class="chapter-title">循环语句</div>
+                    <span class="chapter-icon">🔄</span>
+                </div>
+                <p class="chapter-desc">
+                    掌握for循环和while循环，让程序能够重复执行某些操作，
+                    配合break和continue实现灵活的循环控制！
+                </p>
+                <div class="chapter-topics">
+                    <span class="topic-tag">for循环</span>
+                    <span class="topic-tag">while循环</span>
+                    <span class="topic-tag">range()函数</span>
+                    <span class="topic-tag">break</span>
+                    <span class="topic-tag">continue</span>
+                    <span class="topic-tag">循环嵌套</span>
+                </div>
+            </div>
+
+            <!-- 第六章 -->
+            <div class="chapter-card fade-in">
+                <span class="chapter-status status-pending">待学习</span>
+                <div class="chapter-header">
+                    <div class="chapter-number">06</div>
+                    <div class="chapter-title">函数</div>
+                    <span class="chapter-icon">⚡</span>
+                </div>
+                <p class="chapter-desc">
+                    学习定义和调用函数，理解参数传递和返回值，
+                    掌握作用域和递归的概念，让代码更加模块化和可复用！
+                </p>
+                <div class="chapter-topics">
+                    <span class="topic-tag">函数定义</span>
+                    <span class="topic-tag">参数传递</span>
+                    <span class="topic-tag">返回值</span>
+                    <span class="topic-tag">局部/全局变量</span>
+                    <span class="topic-tag">递归函数</span>
+                    <span class="topic-tag">lambda表达式</span>
+                </div>
+            </div>
+
+            <!-- 第七章 -->
+            <div class="chapter-card fade-in">
+                <span class="chapter-status status-pending">待学习</span>
+                <div class="chapter-header">
+                    <div class="chapter-number">07</div>
+                    <div class="chapter-title">列表与元组</div>
+                    <span class="chapter-icon">📋</span>
+                </div>
+                <p class="chapter-desc">
+                    深入学习Python中最常用的数据结构——列表和元组，
+                    掌握索引、切片、遍历和各种常用操作方法！
+                </p>
+                <div class="chapter-topics">
+                    <span class="topic-tag">列表创建</span>
+                    <span class="topic-tag">索引与切片</span>
+                    <span class="topic-tag">列表方法</span>
+                    <span class="topic-tag">列表推导式</span>
+                    <span class="topic-tag">元组</span>
+                    <span class="topic-tag">解包</span>
+                </div>
+            </div>
+
+            <!-- 第八章 -->
+            <div class="chapter-card fade-in">
+                <span class="chapter-status status-pending">待学习</span>
+                <div class="chapter-header">
+                    <div class="chapter-number">08</div>
+                    <div class="chapter-title">字典与集合</div>
+                    <span class="chapter-icon">📖</span>
+                </div>
+                <p class="chapter-desc">
+                    学习字典这种键值对数据结构，以及集合的使用方法，
+                    这些数据结构在数据处理和分析中非常重要！
+                </p>
+                <div class="chapter-topics">
+                    <span class="topic-tag">字典创建</span>
+                    <span class="topic-tag">字典操作</span>
+                    <span class="topic-tag">字典方法</span>
+                    <span class="topic-tag">集合</span>
+                    <span class="topic-tag">集合运算</span>
+                    <span class="topic-tag">数据结构选择</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 学习小贴士 -->
+        <div class="tips-section fade-in">
+            <h3 class="tips-title">💡 学习小贴士</h3>
+            <div class="tips-grid">
+                <div class="tip-item">
+                    <div class="tip-icon">✍️</div>
+                    <div class="tip-text">多动手敲代码<br>实践出真知</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">🐛</div>
+                    <div class="tip-text">不怕报错<br>错误是最好的老师</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">📝</div>
+                    <div class="tip-text">做好笔记<br>记录学习心得</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">🎯</div>
+                    <div class="tip-text">设定小目标<br>一步步前进</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p class="footer-text">
+            用 <span class="footer-heart">❤</span> 制作 · 何冬怡的学习空间
+        </p>
+    </footer>
+
+    <!-- 回到顶部按钮 -->
+    <button class="back-to-top" id="backToTop" title="回到顶部">↑</button>
+
+    <script>
+        // ========== 飘落装饰 ==========
+        function createFallingDecorations() {
+            const container = document.getElementById('fallingDecorations');
+            const items = ['🐍', '💻', '✨', '📝', '💡', '⭐', '🎯', '📚'];
+            
+            function createItem() {
+                const item = document.createElement('span');
+                item.className = 'falling-item';
+                item.textContent = items[Math.floor(Math.random() * items.length)];
+                item.style.left = Math.random() * 100 + '%';
+                item.style.fontSize = (Math.random() * 12 + 14) + 'px';
+                item.style.animationDuration = (Math.random() * 8 + 8) + 's';
+                item.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(item);
+
+                setTimeout(() => {
+                    item.remove();
+                }, 16000);
+            }
+
+            for (let i = 0; i < 6; i++) {
+                setTimeout(createItem, i * 800);
+            }
+
+            setInterval(createItem, 2500);
+        }
+
+        createFallingDecorations();
+
+        // ========== 滚动动画 ==========
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ========== 进度条动画 ==========
+        setTimeout(() => {
+            // 这里可以后续添加学习进度统计功能
+            // 目前默认显示0%
+            document.getElementById('progressBar').style.width = '0%';
+        }, 500);
+
+        // ========== 回到顶部 ==========
+        const backToTop = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ========== 导航栏平滑滚动 ==========
+        document.querySelectorAll('.navbar-links a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('#') && href.length > 1) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
