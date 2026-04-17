@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python学习站 🐍 - 跟着冬怡学编程</title>
+
+    <!-- CodeMirror 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+
+    <!-- Pyodide -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
 
@@ -788,6 +800,351 @@
             .hero-stat-num { font-size: 1.5rem; }
             .skip-grid { grid-template-columns: 1fr; }
         }
+        /* ========== 代码运行面板 ========== */
+        .code-runner-fab {
+            position: fixed;
+            bottom: 100px; right: 30px;
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--pink-main), var(--pink-dark));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 6px 25px var(--shadow-pink);
+            z-index: 200;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .code-runner-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 35px rgba(255, 92, 158, 0.5);
+        }
+
+        .code-runner-fab .fab-badge {
+            position: absolute;
+            top: -4px; right: -4px;
+            width: 18px; height: 18px;
+            background: #4ade80;
+            border-radius: 50%;
+            border: 2px solid white;
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .code-runner-panel {
+            position: fixed;
+            bottom: 0; right: 0;
+            width: 520px;
+            height: 600px;
+            max-height: 80vh;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            box-shadow: -8px -8px 40px rgba(0,0,0,0.15);
+            z-index: 201;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .code-runner-panel.open {
+            transform: translateY(0);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, var(--pink-light), var(--lavender));
+            border-bottom: 2px solid var(--pink-light);
+            flex-shrink: 0;
+            gap: 10px;
+        }
+
+        .panel-drag {
+            width: 40px; height: 4px;
+            background: var(--pink-main);
+            border-radius: 4px;
+            cursor: grab;
+            opacity: 0.6;
+            flex-shrink: 0;
+        }
+
+        .panel-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 1rem;
+            color: var(--pink-dark);
+            flex: 1;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .panel-btn {
+            background: white;
+            border: 2px solid var(--pink-light);
+            border-radius: 10px;
+            padding: 5px 12px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .panel-btn:hover {
+            border-color: var(--pink-main);
+            background: var(--pink-light);
+        }
+
+        .panel-btn-run {
+            background: var(--pink-main);
+            color: white;
+            border-color: var(--pink-main);
+        }
+
+        .panel-btn-run:hover {
+            background: var(--pink-dark);
+            border-color: var(--pink-dark);
+        }
+
+        .panel-btn-run:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .panel-btn-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-light);
+            padding: 2px 6px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .panel-btn-close:hover {
+            background: rgba(0,0,0,0.05);
+            color: var(--text-dark);
+        }
+
+        .panel-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 示例代码选择 */
+        .example-selector {
+            padding: 10px 18px;
+            background: var(--cream);
+            border-bottom: 1px solid var(--pink-light);
+            flex-shrink: 0;
+        }
+
+        .example-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .example-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .example-chip {
+            background: white;
+            border: 1.5px solid var(--pink-light);
+            border-radius: 12px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .example-chip:hover, .example-chip.active {
+            background: var(--pink-main);
+            color: white;
+            border-color: var(--pink-main);
+        }
+
+        /* 编辑器区域 */
+        .editor-wrapper {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+        }
+
+        .editor-wrapper .CodeMirror {
+            height: 100%;
+            font-size: 13px;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            border-radius: 0;
+        }
+
+        .CodeMirror-gutters {
+            border-right: 1px solid var(--pink-light) !important;
+        }
+
+        /* 输出区域 */
+        .output-section {
+            border-top: 2px solid var(--pink-light);
+            flex-shrink: 0;
+            max-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 18px;
+            background: var(--cream);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .output-header:hover {
+            background: var(--pink-light);
+        }
+
+        .output-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .output-toggle {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+
+        .output-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .output-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 18px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 12.5px;
+            line-height: 1.7;
+            color: var(--text-dark);
+            background: #fefefe;
+            transition: max-height 0.3s ease;
+        }
+
+        .output-content.collapsed {
+            max-height: 0;
+            padding: 0 18px;
+            overflow: hidden;
+        }
+
+        .output-line {
+            padding: 1px 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .output-error {
+            color: #e53e3e;
+            background: #fff5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .output-success {
+            color: #276749;
+        }
+
+        .output-info {
+            color: var(--pink-main);
+            font-style: italic;
+        }
+
+        /* Pyodide 加载状态 */
+        .pyodide-status {
+            padding: 8px 18px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            background: var(--cream);
+            border-bottom: 1px solid var(--pink-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status-loading {
+            background: #fbbf24;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .status-ready { background: #4ade80; }
+        .status-error { background: #f87171; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* 遮罩层 */
+        .panel-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.2);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .panel-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .code-runner-panel {
+                width: 100%;
+                height: 85vh;
+                border-radius: 20px 20px 0 0;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -1288,6 +1645,553 @@
                     link.classList.add('active');
                 }
             });
+        });
+    </script>
+
+    <!-- 代码运行面板遮罩 -->
+    <div class="panel-overlay" id="panelOverlay"></div>
+
+    <!-- 悬浮按钮 -->
+    <button class="code-runner-fab" id="codeRunnerFab" title="打开代码运行器">
+        🐍
+        <span class="fab-badge" id="fabBadge" style="display:none;">✓</span>
+    </button>
+
+    <!-- 代码运行面板 -->
+    <div class="code-runner-panel" id="codeRunnerPanel">
+        <div class="panel-header">
+            <div class="panel-drag"></div>
+            <div class="panel-title">🐍 Python 在线运行器</div>
+            <div class="panel-actions">
+                <button class="panel-btn panel-btn-run" id="btnRun" disabled>
+                    ▶ 运行
+                </button>
+                <button class="panel-btn" id="btnClear" title="清空输出">🗑️</button>
+                <button class="panel-btn" id="btnReset" title="重置代码">↺</button>
+                <button class="panel-btn-close" id="btnClose" title="关闭面板">✕</button>
+            </div>
+        </div>
+
+        <div class="pyodide-status" id="pyodideStatus">
+            <span class="status-dot status-loading" id="statusDot"></span>
+            <span id="statusText">正在加载 Python 运行环境...</span>
+        </div>
+
+        <div class="panel-body">
+            <!-- 示例代码选择 -->
+            <div class="example-selector">
+                <div class="example-label">📋 示例代码（点击加载）</div>
+                <div class="example-chips" id="exampleChips">
+                    <span class="example-chip active" data-example="hello">Hello World</span>
+                    <span class="example-chip" data-example="datatype">数据类型</span>
+                    <span class="example-chip" data-example="control">条件与循环</span>
+                    <span class="example-chip" data-example="function">函数</span>
+                    <span class="example-chip" data-example="class">面向对象</span>
+                    <span class="example-chip" data-example="file">异常处理</span>
+                    <span class="example-chip" data-example="list">列表操作</span>
+                    <span class="example-chip" data-example="dict">字典操作</span>
+                    <span class="example-chip" data-example="comprehension">推导式</span>
+                    <span class="example-chip" data-example="numpy">NumPy</span>
+                </div>
+            </div>
+
+            <!-- 代码编辑器 -->
+            <div class="editor-wrapper">
+                <textarea id="codeEditor"></textarea>
+            </div>
+
+            <!-- 输出区域 -->
+            <div class="output-section">
+                <div class="output-header" id="outputHeader">
+                    <span class="output-label">📤 输出结果</span>
+                    <span class="output-toggle" id="outputToggle">▼</span>
+                </div>
+                <div class="output-content" id="outputContent">
+                    <div class="output-line output-info">点击「▶ 运行」查看输出结果...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 示例代码库 ==========
+        const examples = {
+            hello: `# 🌟 Hello World - 你的第一行Python代码
+print("Hello, World!")
+print("你好，我是冬怡！🐍")
+print("欢迎来到Python的世界 ✨")
+
+# 简单计算
+name = "冬怡"
+age = 20
+print(f"我叫{name}，今年{age}岁")
+print(f"3年后我{age + 3}岁啦！")`,
+
+            datatype: `# 📦 Python 数据类型
+# 整数 int
+a = 42
+print(f"整数: {a}, 类型: {type(a)}")
+
+# 浮点数 float
+b = 3.14
+print(f"浮点数: {b}, 类型: {type(b)}")
+
+# 字符串 str
+s = "Hello Python"
+print(f"字符串: {s}, 长度: {len(s)}")
+
+# 布尔值 bool
+flag = True
+print(f"布尔值: {flag}, 类型: {type(flag)}")
+
+# 类型转换
+x = "123"
+print(f"字符串 '{x}' 转整数: {int(x) + 1}")`,
+
+            control: `# 🔀 条件语句与循环
+# if-elif-else
+score = 85
+if score >= 90:
+    grade = "优秀 🌟"
+elif score >= 80:
+    grade = "良好 👍"
+elif score >= 60:
+    grade = "及格 ✅"
+else:
+    grade = "需要加油 💪"
+print(f"成绩: {score}, 等级: {grade}")
+
+# for 循环
+print("\\n--- for 循环 ---")
+fruits = ["苹果", "香蕉", "草莓", "芒果"]
+for i, fruit in enumerate(fruits):
+    print(f"  {i+1}. {fruit}")
+
+# while 循环
+print("\\n--- while 循环 ---")
+count = 1
+while count <= 5:
+    print(f"  第 {count} 次循环")
+    count += 1
+
+# 列表推导式
+squares = [x**2 for x in range(1, 8)]
+print(f"\\n1-7的平方: {squares}")`,
+
+            function: `# ⚡ 函数定义
+# 基本函数
+def greet(name):
+    return f"你好，{name}！欢迎学习Python 🐍"
+
+print(greet("冬怡"))
+
+# 默认参数
+def power(base, exp=2):
+    return base ** exp
+
+print(f"3的平方: {power(3)}")
+print(f"2的10次方: {power(2, 10)}")
+
+# 可变参数
+def total(*numbers):
+    return sum(numbers)
+
+print(f"总和: {total(1, 2, 3, 4, 5)}")
+
+# lambda 表达式
+square = lambda x: x ** 2
+nums = [1, 2, 3, 4, 5]
+squared = list(map(square, nums))
+print(f"平方后: {squared}")
+
+# 高阶函数
+even = list(filter(lambda x: x % 2 == 0, range(1, 11)))
+print(f"1-10的偶数: {even}")`,
+
+            class: `# 🏗️ 面向对象编程
+class Student:
+    def __init__(self, name, major):
+        self.name = name
+        self.major = major
+        self.scores = []
+    
+    def add_score(self, score):
+        self.scores.append(score)
+    
+    def average(self):
+        if not self.scores:
+            return 0
+        return sum(self.scores) / len(self.scores)
+    
+    def __str__(self):
+        return f"Student({self.name}, {self.major}, 平均分: {self.average():.1f})"
+
+# 创建学生
+s1 = Student("冬怡", "商务数据分析")
+s1.add_score(92)
+s1.add_score(88)
+s1.add_score(95)
+print(s1)
+
+# 继承
+class GradStudent(Student):
+    def __init__(self, name, major, research):
+        super().__init__(name, major)
+        self.research = research
+    
+    def __str__(self):
+        base = super().__str__()
+        return f"{base}, 研究方向: {self.research}"
+
+g1 = GradStudent("小明", "计算机", "机器学习")
+g1.add_score(90)
+g1.add_score(85)
+print(g1)`,
+
+            file: `# 🛡️ 异常处理
+import json
+from io import StringIO
+
+# try-except 基础
+print("--- 基础异常处理 ---")
+def safe_divide(a, b):
+    try:
+        result = a / b
+        return f"{a} / {b} = {result}"
+    except ZeroDivisionError:
+        return "错误：除数不能为零！❌"
+    except TypeError as e:
+        return f"类型错误: {e}"
+    finally:
+        print("  (计算完成)")
+
+print(safe_divide(10, 3))
+print(safe_divide(10, 0))
+
+# JSON 处理
+print("\\n--- JSON 处理 ---")
+data = {
+    "name": "冬怡",
+    "skills": ["Python", "数据分析", "舞蹈"],
+    "school": "广东科学职业技术学院"
+}
+json_str = json.dumps(data, ensure_ascii=False, indent=2)
+print(json_str)
+
+# 解析 JSON
+parsed = json.loads(json_str)
+print(f"\\n姓名: {parsed['name']}")
+print(f"技能: {', '.join(parsed['skills'])}")`,
+
+            list: `# 📋 列表操作大全
+fruits = ["苹果", "香蕉", "草莓"]
+
+# 增删改查
+fruits.append("芒果")       # 添加
+fruits.insert(1, "蓝莓")    # 插入
+print(f"列表: {fruits}")
+
+fruits.remove("香蕉")       # 删除
+popped = fruits.pop()       # 弹出
+print(f"删除后: {fruits}, 弹出: {popped}")
+
+# 切片
+nums = list(range(1, 11))
+print(f"\\n完整: {nums}")
+print(f"前3个: {nums[:3]}")
+print(f"后3个: {nums[-3:]}")
+print(f"偶数位: {nums[::2]}")
+print(f"反转: {nums[::-1]}")
+
+# 常用方法
+print(f"\\n求和: {sum(nums)}")
+print(f"最大: {max(nums)}, 最小: {min(nums)}")
+print(f"排序: {sorted([3,1,4,1,5,9,2,6])}")
+
+# 列表推导式
+matrix = [[1,2,3], [4,5,6], [7,8,9]]
+flat = [x for row in matrix for x in row]
+print(f"\\n展平矩阵: {flat}")`,
+
+            dict: `# 📖 字典操作
+# 创建字典
+student = {
+    "name": "冬怡",
+    "age": 20,
+    "major": "商务数据分析",
+    "hobbies": ["跳舞", "编程", "阅读"]
+}
+
+# 访问
+print(f"姓名: {student['name']}")
+print(f"年龄: {student.get('age', '未知')}")
+
+# 修改
+student["age"] = 21
+student["city"] = "广东"
+print(f"\\n修改后: {student}")
+
+# 遍历
+print("\\n--- 遍历字典 ---")
+for key, value in student.items():
+    print(f"  {key}: {value}")
+
+# 字典推导式
+scores = {"数学": 92, "英语": 88, "Python": 95, "数据": 90}
+high_scores = {k: v for k, v in scores.items() if v >= 90}
+print(f"\\n90分以上: {high_scores}")
+
+# 嵌套字典
+classroom = {
+    "A班": {"人数": 40, "平均分": 85},
+    "B班": {"人数": 38, "平均分": 88}
+}
+for cls, info in classroom.items():
+    print(f"{cls}: {info['人数']}人, 均分{info['平均分']}")`,
+
+            comprehension: `# ✨ 推导式进阶
+# 列表推导式
+squares = [x**2 for x in range(1, 11)]
+print(f"平方: {squares}")
+
+evens = [x for x in range(1, 21) if x % 2 == 0]
+print(f"偶数: {evens}")
+
+# 带条件的推导式
+words = ["hello", "world", "python", "hi", "code"]
+long_words = [w.upper() for w in words if len(w) > 3]
+print(f"长单词: {long_words}")
+
+# 字典推导式
+word_lengths = {w: len(w) for w in words}
+print(f"\\n单词长度: {word_lengths}")
+
+# 集合推导式
+nums = [1, 2, 2, 3, 3, 3, 4, 4, 5]
+unique_squares = {x**2 for x in nums}
+print(f"\\n唯一平方: {unique_squares}")
+
+# 生成器表达式（节省内存）
+total = sum(x**2 for x in range(1, 1001))
+print(f"\\n1-1000的平方和: {total}")`,
+
+            numpy: `# 🔬 NumPy 数组操作
+import numpy as np
+
+# 创建数组
+arr = np.array([1, 2, 3, 4, 5])
+print(f"数组: {arr}")
+print(f"类型: {arr.dtype}, 形状: {arr.shape}")
+
+# 数组运算（向量化）
+arr2 = arr * 2
+print(f"×2: {arr2}")
+print(f"平方: {arr ** 2}")
+print(f"求和: {arr.sum()}, 均值: {arr.mean():.2f}")
+
+# 多维数组
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+print(f"\\n矩阵:\\n{matrix}")
+print(f"对角线: {np.diag(matrix)}")
+print(f"转置:\\n{matrix.T}")
+
+# 广播机制
+a = np.array([[1], [2], [3]])  # (3,1)
+b = np.array([10, 20, 30])     # (3,)
+print(f"\\n广播相加:\\n{a + b}")
+
+# 筛选
+data = np.array([12, 45, 23, 67, 34, 89, 56])
+mask = data > 40
+print(f"\\n原数据: {data}")
+print(f">40的: {data[mask]}")
+print(f"最大值: {data.max()}, 最小值: {data.min()}")
+print(f"排序: {np.sort(data)}")`
+        };
+
+        // ========== 面板逻辑 ==========
+        const fab = document.getElementById('codeRunnerFab');
+        const panel = document.getElementById('codeRunnerPanel');
+        const overlay = document.getElementById('panelOverlay');
+        const btnRun = document.getElementById('btnRun');
+        const btnClear = document.getElementById('btnClear');
+        const btnReset = document.getElementById('btnReset');
+        const btnClose = document.getElementById('btnClose');
+        const outputContent = document.getElementById('outputContent');
+        const outputHeader = document.getElementById('outputHeader');
+        const outputToggle = document.getElementById('outputToggle');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const fabBadge = document.getElementById('fabBadge');
+
+        let editor = null;
+        let pyodide = null;
+        let isReady = false;
+        let currentExample = 'hello';
+
+        // 初始化 CodeMirror
+        editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
+            mode: 'python',
+            theme: 'dracula',
+            lineNumbers: true,
+            matchBrackets: true,
+            autoCloseBrackets: true,
+            indentUnit: 4,
+            tabSize: 4,
+            indentWithTabs: false,
+            lineWrapping: true,
+            extraKeys: {
+                'Ctrl-Enter': () => runCode(),
+                'Cmd-Enter': () => runCode()
+            }
+        });
+        editor.setValue(examples.hello);
+
+        // 加载 Pyodide
+        async function loadPyodide_() {
+            try {
+                pyodide = await loadPyodide();
+                isReady = true;
+                statusDot.className = 'status-dot status-ready';
+                statusText.textContent = '✅ Python 运行环境已就绪';
+                btnRun.disabled = false;
+                fabBadge.style.display = 'flex';
+            } catch (err) {
+                statusDot.className = 'status-dot status-error';
+                statusText.textContent = '❌ 加载失败，请刷新页面重试';
+                console.error('Pyodide load error:', err);
+            }
+        }
+        loadPyodide_();
+
+        // 面板开关
+        function openPanel() {
+            panel.classList.add('open');
+            overlay.classList.add('visible');
+            setTimeout(() => editor.refresh(), 400);
+        }
+
+        function closePanel() {
+            panel.classList.remove('open');
+            overlay.classList.remove('visible');
+        }
+
+        fab.addEventListener('click', openPanel);
+        btnClose.addEventListener('click', closePanel);
+        overlay.addEventListener('click', closePanel);
+
+        // 输出折叠
+        let outputCollapsed = false;
+        outputHeader.addEventListener('click', () => {
+            outputCollapsed = !outputCollapsed;
+            outputContent.classList.toggle('collapsed', outputCollapsed);
+            outputToggle.classList.toggle('collapsed', outputCollapsed);
+        });
+
+        // 示例代码切换
+        document.getElementById('exampleChips').addEventListener('click', (e) => {
+            const chip = e.target.closest('.example-chip');
+            if (!chip) return;
+            const key = chip.dataset.example;
+            if (examples[key]) {
+                document.querySelectorAll('.example-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                editor.setValue(examples[key]);
+                currentExample = key;
+                editor.focus();
+            }
+        });
+
+        // 运行代码
+        async function runCode() {
+            if (!isReady || !pyodide) return;
+
+            const code = editor.getValue();
+            btnRun.disabled = true;
+            btnRun.innerHTML = '⏳ 运行中...';
+            outputContent.innerHTML = '';
+
+            const startTime = performance.now();
+
+            try {
+                // 重定向 stdout/stderr
+                pyodide.runPython(`
+import sys
+from io import StringIO
+sys.stdout = StringIO()
+sys.stderr = StringIO()
+`);
+
+                await pyodide.runPythonAsync(code);
+
+                const stdout = pyodide.runPython('sys.stdout.getvalue()');
+                const stderr = pyodide.runPython('sys.stderr.getvalue()');
+
+                const elapsed = (performance.now() - startTime).toFixed(0);
+
+                if (stdout) {
+                    stdout.split('\n').forEach(line => {
+                        if (line) appendOutput(line, 'success');
+                    });
+                }
+
+                if (stderr) {
+                    stderr.split('\n').forEach(line => {
+                        if (line) appendOutput(line, 'error');
+                    });
+                }
+
+                if (!stdout && !stderr) {
+                    appendOutput('(无输出)', 'info');
+                }
+
+                appendOutput(`\\n✅ 运行完成 (${elapsed}ms)`, 'info');
+
+            } catch (err) {
+                const elapsed = (performance.now() - startTime).toFixed(0);
+                appendOutput(`❌ 错误: ${err.message}`, 'error');
+                appendOutput(`\\n⏱ 运行时间: ${elapsed}ms`, 'info');
+            }
+
+            // 恢复 stdout
+            pyodide.runPython(`
+import sys
+sys.stdout = sys.__stdout__
+sys.stderr = sys.__stderr__
+`);
+
+            btnRun.disabled = false;
+            btnRun.innerHTML = '▶ 运行';
+        }
+
+        function appendOutput(text, type) {
+            const line = document.createElement('div');
+            line.className = `output-line output-${type}`;
+            line.textContent = text;
+            outputContent.appendChild(line);
+            outputContent.scrollTop = outputContent.scrollHeight;
+        }
+
+        // 清空输出
+        btnClear.addEventListener('click', () => {
+            outputContent.innerHTML = '<div class="output-line output-info">输出已清空</div>';
+        });
+
+        // 重置代码
+        btnReset.addEventListener('click', () => {
+            if (examples[currentExample]) {
+                editor.setValue(examples[currentExample]);
+            }
+            outputContent.innerHTML = '<div class="output-line output-info">代码已重置</div>';
+        });
+
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && panel.classList.contains('open')) {
+                closePanel();
+            }
         });
     </script>
 
