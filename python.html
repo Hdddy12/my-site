@@ -801,6 +801,122 @@
             .skip-grid { grid-template-columns: 1fr; }
         }
         /* ========== 代码运行面板 ========== */
+        /* ========== 文档内代码展示 ========== */
+        .code-example {
+            margin-top: 18px;
+            border: 2px solid var(--pink-light);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .code-example:hover {
+            border-color: var(--pink-main);
+        }
+
+        .code-example-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, var(--pink-light), var(--lavender));
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .code-example-header:hover {
+            background: var(--pink-light);
+        }
+
+        .code-example-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--pink-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .code-example-toggle {
+            font-size: 0.7rem;
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+
+        .code-example-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .code-example-body {
+            max-height: 500px;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+
+        .code-example-body.collapsed {
+            max-height: 0;
+            padding: 0;
+        }
+
+        .code-example pre {
+            margin: 0;
+            padding: 16px 18px;
+            background: #282a36;
+            color: #f8f8f2;
+            font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+            font-size: 12.5px;
+            line-height: 1.7;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .code-example-actions {
+            display: flex;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--cream);
+            border-top: 1px solid var(--pink-light);
+        }
+
+        .code-action-btn {
+            background: white;
+            border: 1.5px solid var(--pink-light);
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .code-action-btn:hover {
+            border-color: var(--pink-main);
+            background: var(--pink-light);
+        }
+
+        .code-action-btn.primary {
+            background: var(--pink-main);
+            color: white;
+            border-color: var(--pink-main);
+        }
+
+        .code-action-btn.primary:hover {
+            background: var(--pink-dark);
+            border-color: var(--pink-dark);
+        }
+
+        /* 代码高亮 */
+        .code-example .keyword { color: #ff79c6; }
+        .code-example .string { color: #f1fa8c; }
+        .code-example .comment { color: #6272a4; }
+        .code-example .function { color: #50fa7b; }
+        .code-example .number { color: #bd93f9; }
+        .code-example .builtin { color: #8be9fd; }
+
         .code-runner-fab {
             position: fixed;
             bottom: 100px; right: 30px;
@@ -1233,6 +1349,63 @@
                     <span class="k-tag">算术 / 比较 / 逻辑运算符</span>
                     <span class="k-tag">类型转换</span>
                 </div>
+
+                <!-- 示例代码 -->
+                <div class="code-example">
+                    <div class="code-example-header" onclick="toggleCodeExample(this)">
+                        <span class="code-example-title">📝 查看示例代码</span>
+                        <span class="code-example-toggle">▼</span>
+                    </div>
+                    <div class="code-example-body">
+                        <pre><code><span class="comment"># 📦 Python 数据类型示例</span>
+
+<span class="comment"># 整数 int</span>
+<span class="builtin">a</span> = <span class="number">42</span>
+<span class="builtin">print</span>(<span class="string">f"整数: {a}, 类型: {type(a).__name__}"</span>)
+
+<span class="comment"># 浮点数 float</span>
+<span class="builtin">b</span> = <span class="number">3.14</span>
+<span class="builtin">print</span>(<span class="string">f"浮点数: {b}, 类型: {type(b).__name__}"</span>)
+
+<span class="comment"># 字符串 str</span>
+<span class="builtin">s</span> = <span class="string">"Hello Python"</span>
+<span class="builtin">print</span>(<span class="string">f"字符串: {s}, 长度: {len(s)}"</span>)
+
+<span class="comment"># 布尔值 bool</span>
+<span class="builtin">flag</span> = <span class="keyword">True</span>
+<span class="builtin">print</span>(<span class="string">f"布尔值: {flag}, 类型: {type(flag).__name__}"</span>)
+
+<span class="comment"># 列表 list - 可变的有序集合</span>
+<span class="builtin">fruits</span> = [<span class="string">"苹果"</span>, <span class="string">"香蕉"</span>, <span class="string">"草莓"</span>]
+<span class="builtin">print</span>(<span class="string">f"列表: {fruits}"</span>)
+
+<span class="comment"># 字典 dict - 键值对集合</span>
+<span class="builtin">student</span> = {<span class="string">"name"</span>: <span class="string">"冬怡"</span>, <span class="string">"age"</span>: <span class="number">20</span>}
+<span class="builtin">print</span>(<span class="string">f"字典: {student}"</span>)
+
+<span class="comment"># 元组 tuple - 不可变的有序集合</span>
+<span class="builtin">point</span> = (<span class="number">10</span>, <span class="number">20</span>)
+<span class="builtin">print</span>(<span class="string">f"元组: {point}"</span>)
+
+<span class="comment"># 集合 set - 无序不重复集合</span>
+<span class="builtin">unique_nums</span> = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>}
+<span class="builtin">print</span>(<span class="string">f"集合(自动去重): {unique_nums}"</span>)
+
+<span class="comment"># 类型转换</span>
+<span class="builtin">x</span> = <span class="string">"123"</span>
+<span class="builtin">print</span>(<span class="string">f"字符串 '{x}' 转整数: {int(x) + 1}"</span>)
+
+<span class="comment"># 运算符</span>
+<span class="builtin">print</span>(<span class="string">f"10 + 3 = {10 + 3}"</span>)   <span class="comment"># 加法</span>
+<span class="builtin">print</span>(<span class="string">f"10 // 3 = {10 // 3}"</span>) <span class="comment"># 整除</span>
+<span class="builtin">print</span>(<span class="string">f"10 % 3 = {10 % 3}"</span>)   <span class="comment"># 取余</span>
+<span class="builtin">print</span>(<span class="string">f"2 ** 10 = {2 ** 10}"</span>) <span class="comment"># 幂运算</span></code></pre>
+                        <div class="code-example-actions">
+                            <button class="code-action-btn primary" onclick="loadToRunner('datatype')">🐍 在运行器中打开</button>
+                            <button class="code-action-btn" onclick="copyCode(this)">📋 复制代码</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="module-card module-pink fade-in">
@@ -1253,6 +1426,64 @@
                     <span class="k-tag">循环嵌套</span>
                     <span class="k-tag">列表推导式</span>
                 </div>
+
+                <!-- 示例代码 -->
+                <div class="code-example">
+                    <div class="code-example-header" onclick="toggleCodeExample(this)">
+                        <span class="code-example-title">📝 查看示例代码</span>
+                        <span class="code-example-toggle">▼</span>
+                    </div>
+                    <div class="code-example-body">
+                        <pre><code><span class="comment"># 🔀 条件语句与循环示例</span>
+
+<span class="comment"># if-elif-else 条件判断</span>
+<span class="builtin">score</span> = <span class="number">85</span>
+<span class="keyword">if</span> score >= <span class="number">90</span>:
+    <span class="builtin">grade</span> = <span class="string">"优秀 🌟"</span>
+<span class="keyword">elif</span> score >= <span class="number">80</span>:
+    <span class="builtin">grade</span> = <span class="string">"良好 👍"</span>
+<span class="keyword">elif</span> score >= <span class="number">60</span>:
+    <span class="builtin">grade</span> = <span class="string">"及格 ✅"</span>
+<span class="keyword">else</span>:
+    <span class="builtin">grade</span> = <span class="string">"需要加油 💪"</span>
+<span class="builtin">print</span>(<span class="string">f"成绩: {score}, 等级: {grade}"</span>)
+
+<span class="comment"># for 循环遍历</span>
+<span class="builtin">print</span>(<span class="string">"\n--- for 循环 ---"</span>)
+<span class="builtin">fruits</span> = [<span class="string">"苹果"</span>, <span class="string">"香蕉"</span>, <span class="string">"草莓"</span>, <span class="string">"芒果"</span>]
+<span class="keyword">for</span> i, fruit <span class="keyword">in</span> <span class="builtin">enumerate</span>(fruits):
+    <span class="builtin">print</span>(<span class="string">f"  {i+1}. {fruit}"</span>)
+
+<span class="comment"># range() 生成序列</span>
+<span class="builtin">print</span>(<span class="string">"\n--- range() ---"</span>)
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">1</span>, <span class="number">6</span>):
+    <span class="builtin">print</span>(<span class="string">f"  {i} 的平方是 {i**2}"</span>)
+
+<span class="comment"># while 循环</span>
+<span class="builtin">print</span>(<span class="string">"\n--- while 循环 ---"</span>)
+<span class="builtin">count</span> = <span class="number">1</span>
+<span class="keyword">while</span> count <= <span class="number">3</span>:
+    <span class="builtin">print</span>(<span class="string">f"  第 {count} 次"</span>)
+    count += <span class="number">1</span>
+
+<span class="comment"># break 和 continue</span>
+<span class="builtin">print</span>(<span class="string">"\n--- break/continue ---"</span>)
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">1</span>, <span class="number">10</span>):
+    <span class="keyword">if</span> i == <span class="number">3</span>:
+        <span class="keyword">continue</span>  <span class="comment"># 跳过3</span>
+    <span class="keyword">if</span> i == <span class="number">7</span>:
+        <span class="keyword">break</span>     <span class="comment"># 到7停止</span>
+    <span class="builtin">print</span>(<span class="string">f"  i = {i}"</span>)
+
+<span class="comment"># 列表推导式</span>
+<span class="builtin">squares</span> = [x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">1</span>, <span class="number">8</span>)]
+<span class="builtin">print</span>(<span class="string">f"\n1-7的平方: {squares}"</span>)</code></pre>
+                        <div class="code-example-actions">
+                            <button class="code-action-btn primary" onclick="loadToRunner('control')">🐍 在运行器中打开</button>
+                            <button class="code-action-btn" onclick="copyCode(this)">📋 复制代码</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="module-card module-pink fade-in">
@@ -1272,6 +1503,65 @@
                     <span class="k-tag">作用域（局部/全局）</span>
                     <span class="k-tag">import 模块导入</span>
                     <span class="k-tag">lambda 表达式</span>
+                </div>
+
+                <!-- 示例代码 -->
+                <div class="code-example">
+                    <div class="code-example-header" onclick="toggleCodeExample(this)">
+                        <span class="code-example-title">📝 查看示例代码</span>
+                        <span class="code-example-toggle">▼</span>
+                    </div>
+                    <div class="code-example-body">
+                        <pre><code><span class="comment"># ⚡ 函数定义示例</span>
+
+<span class="comment"># 基本函数</span>
+<span class="keyword">def</span> <span class="function">greet</span>(name):
+    <span class="keyword">return</span> <span class="string">f"你好，{name}！欢迎学习Python 🐍"</span>
+
+<span class="builtin">print</span>(greet(<span class="string">"冬怡"</span>))
+
+<span class="comment"># 默认参数</span>
+<span class="keyword">def</span> <span class="function">power</span>(base, exp=<span class="number">2</span>):
+    <span class="keyword">return</span> base ** exp
+
+<span class="builtin">print</span>(<span class="string">f"3的平方: {power(3)}"</span>)
+<span class="builtin">print</span>(<span class="string">f"2的10次方: {power(2, 10)}"</span>)
+
+<span class="comment"># 关键字参数</span>
+<span class="keyword">def</span> <span class="function">describe</span>(name, age, city=<span class="string">"广东"</span>):
+    <span class="keyword">return</span> <span class="string">f"{name}, {age}岁, 来自{city}"</span>
+
+<span class="builtin">print</span>(describe(<span class="string">"冬怡"</span>, age=<span class="number">20</span>))
+
+<span class="comment"># 可变参数 *args</span>
+<span class="keyword">def</span> <span class="function">total</span>(*numbers):
+    <span class="keyword">return</span> <span class="builtin">sum</span>(numbers)
+
+<span class="builtin">print</span>(<span class="string">f"总和: {total(1, 2, 3, 4, 5)}"</span>)
+
+<span class="comment"># 可变关键字参数 **kwargs</span>
+<span class="keyword">def</span> <span class="function">print_info</span>(**info):
+    <span class="keyword">for</span> key, value <span class="keyword">in</span> info.items():
+        <span class="builtin">print</span>(<span class="string">f"  {key}: {value}"</span>)
+
+<span class="builtin">print</span>(<span class="string">"\n学生信息:"</span>)
+print_info(name=<span class="string">"冬怡"</span>, major=<span class="string">"数据分析"</span>, year=<span class="number">2</span>)
+
+<span class="comment"># lambda 表达式</span>
+<span class="builtin">square</span> = <span class="keyword">lambda</span> x: x ** <span class="number">2</span>
+<span class="builtin">print</span>(<span class="string">f"\n5的平方: {square(5)}"</span>)
+
+<span class="comment"># 高阶函数 map/filter</span>
+<span class="builtin">nums</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+<span class="builtin">squared</span> = <span class="builtin">list</span>(<span class="builtin">map</span>(<span class="keyword">lambda</span> x: x**<span class="number">2</span>, nums))
+<span class="builtin">evens</span> = <span class="builtin">list</span>(<span class="builtin">filter</span>(<span class="keyword">lambda</span> x: x % <span class="number">2</span> == <span class="number">0</span>, nums))
+<span class="builtin">print</span>(<span class="string">f"平方: {squared}"</span>)
+<span class="builtin">print</span>(<span class="string">f"偶数: {evens}"</span>)</code></pre>
+                        <div class="code-example-actions">
+                            <button class="code-action-btn primary" onclick="loadToRunner('function')">🐍 在运行器中打开</button>
+                            <button class="code-action-btn" onclick="copyCode(this)">📋 复制代码</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1305,6 +1595,67 @@
                     <span class="k-tag">多态</span>
                     <span class="k-tag">魔术方法</span>
                 </div>
+
+                <!-- 示例代码 -->
+                <div class="code-example">
+                    <div class="code-example-header" onclick="toggleCodeExample(this)">
+                        <span class="code-example-title">📝 查看示例代码</span>
+                        <span class="code-example-toggle">▼</span>
+                    </div>
+                    <div class="code-example-body">
+                        <pre><code><span class="comment"># 🏗️ 面向对象编程示例</span>
+
+<span class="keyword">class</span> <span class="function">Student</span>:
+    <span class="string">"""学生类 - 展示OOP基础概念"""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, name, major):
+        <span class="comment"># 构造方法 - 初始化属性</span>
+        self.name = name
+        self.major = major
+        self.scores = []
+    
+    <span class="keyword">def</span> <span class="function">add_score</span>(self, score):
+        <span class="string">"""添加成绩"""</span>
+        self.scores.append(score)
+    
+    <span class="keyword">def</span> <span class="function">average</span>(self):
+        <span class="string">"""计算平均分"""</span>
+        <span class="keyword">if not</span> self.scores:
+            <span class="keyword">return</span> <span class="number">0</span>
+        <span class="keyword">return</span> <span class="builtin">sum</span>(self.scores) / <span class="builtin">len</span>(self.scores)
+    
+    <span class="keyword">def</span> <span class="function">__str__</span>(self):
+        <span class="comment"># 魔术方法 - 定义打印格式</span>
+        <span class="keyword">return</span> <span class="string">f"Student({self.name}, {self.major}, 均分: {self.average():.1f})"</span>
+
+<span class="comment"># 创建对象</span>
+<span class="builtin">s1</span> = Student(<span class="string">"冬怡"</span>, <span class="string">"商务数据分析"</span>)
+s1.add_score(<span class="number">92</span>)
+s1.add_score(<span class="number">88</span>)
+s1.add_score(<span class="number">95</span>)
+<span class="builtin">print</span>(s1)
+
+<span class="comment"># 继承</span>
+<span class="keyword">class</span> <span class="function">GradStudent</span>(Student):
+    <span class="string">"""研究生类 - 继承自Student"""</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, name, major, research):
+        <span class="builtin">super</span>().__init__(name, major)  <span class="comment"># 调用父类构造</span>
+        self.research = research
+    
+    <span class="keyword">def</span> <span class="function">__str__</span>(self):
+        <span class="builtin">base</span> = <span class="builtin">super</span>().__str__()
+        <span class="keyword">return</span> <span class="string">f"{base}, 研究: {self.research}"</span>
+
+<span class="builtin">g1</span> = GradStudent(<span class="string">"小明"</span>, <span class="string">"计算机"</span>, <span class="string">"机器学习"</span>)
+g1.add_score(<span class="number">90</span>)
+<span class="builtin">print</span>(g1)</code></pre>
+                        <div class="code-example-actions">
+                            <button class="code-action-btn primary" onclick="loadToRunner('class')">🐍 在运行器中打开</button>
+                            <button class="code-action-btn" onclick="copyCode(this)">📋 复制代码</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="module-card module-blue fade-in">
@@ -1324,6 +1675,55 @@
                     <span class="k-tag">with 上下文管理</span>
                     <span class="k-tag">CSV 文件处理</span>
                     <span class="k-tag">JSON 数据处理</span>
+                </div>
+
+                <!-- 示例代码 -->
+                <div class="code-example">
+                    <div class="code-example-header" onclick="toggleCodeExample(this)">
+                        <span class="code-example-title">📝 查看示例代码</span>
+                        <span class="code-example-toggle">▼</span>
+                    </div>
+                    <div class="code-example-body">
+                        <pre><code><span class="comment"># 🛡️ 异常处理与JSON示例</span>
+<span class="keyword">import</span> json
+
+<span class="comment"># try-except 异常处理</span>
+<span class="builtin">print</span>(<span class="string">"--- 异常处理 ---"</span>)
+<span class="keyword">def</span> <span class="function">safe_divide</span>(a, b):
+    <span class="keyword">try</span>:
+        <span class="builtin">result</span> = a / b
+        <span class="keyword">return</span> <span class="string">f"{a} / {b} = {result}"</span>
+    <span class="keyword">except</span> ZeroDivisionError:
+        <span class="keyword">return</span> <span class="string">"错误：除数不能为零！❌"</span>
+    <span class="keyword">except</span> TypeError <span class="keyword">as</span> e:
+        <span class="keyword">return</span> <span class="string">f"类型错误: {e}"</span>
+    <span class="keyword">finally</span>:
+        <span class="builtin">print</span>(<span class="string">"  (计算完成)"</span>)
+
+<span class="builtin">print</span>(safe_divide(<span class="number">10</span>, <span class="number">3</span>))
+<span class="builtin">print</span>(safe_divide(<span class="number">10</span>, <span class="number">0</span>))
+
+<span class="comment"># JSON 处理</span>
+<span class="builtin">print</span>(<span class="string">"\n--- JSON 处理 ---"</span>)
+<span class="builtin">data</span> = {
+    <span class="string">"name"</span>: <span class="string">"冬怡"</span>,
+    <span class="string">"skills"</span>: [<span class="string">"Python"</span>, <span class="string">"数据分析"</span>, <span class="string">"舞蹈"</span>],
+    <span class="string">"school"</span>: <span class="string">"广东科学职业技术学院"</span>
+}
+
+<span class="comment"># 序列化为JSON字符串</span>
+<span class="builtin">json_str</span> = json.dumps(data, ensure_ascii=<span class="keyword">False</span>, indent=<span class="number">2</span>)
+<span class="builtin">print</span>(json_str)
+
+<span class="comment"># 解析JSON</span>
+<span class="builtin">parsed</span> = json.loads(json_str)
+<span class="builtin">print</span>(<span class="string">f"\n姓名: {parsed['name']}"</span>)
+<span class="builtin">print</span>(<span class="string">f"技能: {', '.join(parsed['skills'])}"</span>)</code></pre>
+                        <div class="code-example-actions">
+                            <button class="code-action-btn primary" onclick="loadToRunner('file')">🐍 在运行器中打开</button>
+                            <button class="code-action-btn" onclick="copyCode(this)">📋 复制代码</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1345,6 +1745,51 @@
                     <span class="k-tag">Pandas Series</span>
                     <span class="k-tag">数据加载与清洗</span>
                     <span class="k-tag">数据筛选与转换</span>
+                </div>
+
+                <!-- 示例代码 -->
+                <div class="code-example">
+                    <div class="code-example-header" onclick="toggleCodeExample(this)">
+                        <span class="code-example-title">📝 查看示例代码</span>
+                        <span class="code-example-toggle">▼</span>
+                    </div>
+                    <div class="code-example-body">
+                        <pre><code><span class="comment"># 🔬 NumPy 数组操作示例</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># 创建数组</span>
+<span class="builtin">arr</span> = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])
+<span class="builtin">print</span>(<span class="string">f"数组: {arr}"</span>)
+<span class="builtin">print</span>(<span class="string">f"类型: {arr.dtype}, 形状: {arr.shape}"</span>)
+
+<span class="comment"># 向量化运算（比循环快很多！）</span>
+<span class="builtin">print</span>(<span class="string">f"×2: {arr * 2}"</span>)
+<span class="builtin">print</span>(<span class="string">f"平方: {arr ** 2}"</span>)
+<span class="builtin">print</span>(<span class="string">f"求和: {arr.sum()}, 均值: {arr.mean():.2f}"</span>)
+
+<span class="comment"># 多维数组</span>
+<span class="builtin">matrix</span> = np.array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],
+                   [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],
+                   [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]])
+<span class="builtin">print</span>(<span class="string">f"\n矩阵:\n{matrix}"</span>)
+<span class="builtin">print</span>(<span class="string">f"转置:\n{matrix.T}"</span>)
+
+<span class="comment"># 广播机制</span>
+<span class="builtin">a</span> = np.array([[<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>]])  <span class="comment"># (3,1)</span>
+<span class="builtin">b</span> = np.array([<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>])     <span class="comment"># (3,)</span>
+<span class="builtin">print</span>(<span class="string">f"\n广播相加:\n{a + b}"</span>)
+
+<span class="comment"># 条件筛选</span>
+<span class="builtin">data</span> = np.array([<span class="number">12</span>, <span class="number">45</span>, <span class="number">23</span>, <span class="number">67</span>, <span class="number">34</span>, <span class="number">89</span>, <span class="number">56</span>])
+<span class="builtin">mask</span> = data > <span class="number">40</span>
+<span class="builtin">print</span>(<span class="string">f"\n原数据: {data}"</span>)
+<span class="builtin">print</span>(<span class="string">f">40的: {data[mask]}"</span>)
+<span class="builtin">print</span>(<span class="string">f"排序: {np.sort(data)}"</span>)</code></pre>
+                        <div class="code-example-actions">
+                            <button class="code-action-btn primary" onclick="loadToRunner('numpy')">🐍 在运行器中打开</button>
+                            <button class="code-action-btn" onclick="copyCode(this)">📋 复制代码</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2193,6 +2638,52 @@ sys.stderr = sys.__stderr__
                 closePanel();
             }
         });
+
+        // ========== 文档内代码展示功能 ==========
+        // 折叠/展开代码示例
+        function toggleCodeExample(header) {
+            const body = header.nextElementSibling;
+            const toggle = header.querySelector('.code-example-toggle');
+            body.classList.toggle('collapsed');
+            toggle.classList.toggle('collapsed');
+        }
+
+        // 加载代码到运行器
+        function loadToRunner(exampleKey) {
+            if (examples[exampleKey]) {
+                // 打开面板
+                openPanel();
+                // 加载代码
+                setTimeout(() => {
+                    editor.setValue(examples[exampleKey]);
+                    // 更新示例标签高亮
+                    document.querySelectorAll('.example-chip').forEach(c => c.classList.remove('active'));
+                    const targetChip = document.querySelector(`.example-chip[data-example="${exampleKey}"]`);
+                    if (targetChip) targetChip.classList.add('active');
+                    currentExample = exampleKey;
+                    editor.focus();
+                }, 450);
+            }
+        }
+
+        // 复制代码
+        function copyCode(btn) {
+            const pre = btn.closest('.code-example-body').querySelector('pre');
+            const code = pre.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = '✅ 已复制';
+                btn.style.background = 'var(--green-light)';
+                btn.style.borderColor = 'var(--green-soft)';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.style.borderColor = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+            });
+        }
     </script>
 
 </body>
